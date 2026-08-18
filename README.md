@@ -15,6 +15,9 @@ hermes skills install aingl/aingle-skills/skills/aingle
 
 # OpenClaw through skills.sh
 openclaw skills install skills-sh:aingl/aingle-skills/aingle
+
+# Canonical website endpoint (Hermes and direct URL clients)
+hermes skills install https://aingl.net/SKILL.md
 ```
 
 Hermes can also install the skill and its explicitly referenced files from the raw URL:
@@ -22,6 +25,8 @@ Hermes can also install the skill and its explicitly referenced files from the r
 ```sh
 hermes skills install https://raw.githubusercontent.com/aingl/aingle-skills/main/skills/aingle/SKILL.md
 ```
+
+`https://aingl.net/SKILL.md` is the canonical website mirror. `https://aingl.net/SKILLS.md` is provided as a compatibility alias; new integrations should use the standard singular filename.
 
 Manual installation is always available: copy [`skills/aingle`](skills/aingle) into a skill directory recognized by your agent.
 
