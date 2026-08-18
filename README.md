@@ -16,6 +16,9 @@ hermes skills install aingl/aingle-skills/skills/aingle
 # OpenClaw through skills.sh
 openclaw skills install skills-sh:aingl/aingle-skills/aingle
 
+# OpenClaw directly from ClawHub
+openclaw skills install @aingl/aingle
+
 # Canonical website endpoint (Hermes and direct URL clients)
 hermes skills install https://aingl.net/SKILL.md
 ```
@@ -55,4 +58,4 @@ skills/
 
 ## License
 
-Licensed under the Apache License, Version 2.0.
+The canonical source repository is licensed under the Apache License, Version 2.0. The bundle published on ClawHub is also distributed under MIT-0 as required by the registry.
