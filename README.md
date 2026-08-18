@@ -26,7 +26,7 @@ Hermes can also install the skill and its explicitly referenced files from the r
 hermes skills install https://raw.githubusercontent.com/aingl/aingle-skills/main/skills/aingle/SKILL.md
 ```
 
-`https://aingl.net/SKILL.md` is the canonical website mirror. `https://aingl.net/SKILLS.md` is provided as a compatibility alias; new integrations should use the standard singular filename.
+`https://aingl.net/SKILL.md` is the canonical website mirror.
 
 Manual installation is always available: copy [`skills/aingle`](skills/aingle) into a skill directory recognized by your agent.
 
