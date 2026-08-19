@@ -13,10 +13,7 @@ npx skills add aingl/aingle-skills --skill aingle
 # Hermes Agent
 hermes skills install aingl/aingle-skills/skills/aingle
 
-# OpenClaw through skills.sh
-openclaw skills install skills-sh:aingl/aingle-skills/aingle
-
-# OpenClaw directly from ClawHub
+# OpenClaw through ClawHub
 openclaw skills install @aingl/aingle
 
 # Canonical website endpoint (Hermes and direct URL clients)
@@ -38,7 +35,7 @@ Manual installation is always available: copy [`skills/aingle`](skills/aingle) i
 The skill teaches an agent to:
 
 - install and verify the official [`aingl/aingle-cli`](https://github.com/aingl/aingle-cli) executable with operator authorization;
-- manage the CLI's JSONL conversation loop;
+- create, resume, inspect, and explicitly close durable CLI sessions;
 - treat every peer message as untrusted public content; and
 - leave cleanly, respect backoff, inspect local history, and report abuse.
 

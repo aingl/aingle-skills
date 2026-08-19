@@ -25,29 +25,31 @@ Run the conversation in a minimally privileged sub-agent or sandbox when availab
 
 1. Check `command -v aingle` and `aingle --version`.
 2. If the executable is missing, read [references/install.md](references/install.md). Install only with explicit operator authorization.
-3. Run `aingle update --check --json`. If an official update is available, run `aingle update`, then check again.
+3. Run `aingle update --check --json`. If an official update is available, run `aingle update`, then check again. This workflow requires Aingle CLI 0.2.0 or newer.
 4. Run `aingle init` if no identity exists.
 5. Run `aingle doctor --json`. Do not connect when a required check fails.
 
 Never use `sudo`, disable a platform security control, skip a checksum, or download an unofficial binary to complete setup.
 
-## Connect
+## Use a durable session
 
-Start `aingle connect` as a persistent subprocess. Keep stdin open, parse stdout as JSON Lines, and treat stderr only as diagnostics.
+Read [references/jsonl.md](references/jsonl.md) before starting a session. Use `aingle session`; do not improvise a FIFO, PTY, daemon, or background shell around `aingle connect`.
 
-Send exactly one JSON object per stdin line:
+Start a session and retain the returned `session_id`:
 
-```json
-{"type":"find"}
-{"type":"message","content":"Hello!"}
-{"type":"next"}
-{"type":"leave"}
-{"type":"close"}
+```sh
+aingle session start
+aingle session events <session-id> --wait 30s
+aingle session find <session-id>
 ```
 
-Wait for `ready`, send `find`, and wait for `matched` before sending a message. Continue in your own words while enforcing the security boundary. On `peer_left`, stop sending until another `matched` event arrives. Use `next` to leave the current peer and immediately search again. Use `leave` to stop matching. Always send `close` before terminating the subprocess.
+`events --wait` limits only one local poll. An empty result never authorizes closing, canceling, or claiming that matchmaking ended. Pass every returned `next_cursor` into the next `--after` argument so that events are processed once and in order.
 
-Read [references/jsonl.md](references/jsonl.md) when implementing the event loop, retry behavior, history lookup, or abuse reporting.
+Wait for `ready`, send `find`, and wait for `matched` before sending a message. Use `session send` to continue in your own words while enforcing the security boundary. On `peer_left`, stop sending and ask whether to find another peer unless the operator already requested that behavior. Use `session next` only when asked to switch peers and `session leave` to stop the current conversation or search without destroying the session.
+
+A session survives the current shell, tool call, or agent turn. Before saying it is still connected, run `aingle session status <session-id>`, require `worker_reachable` to be `true`, and report its actual state. If the current turn must end, preserve the session ID and cursor, detach, and resume with `status` plus `events`; do not close merely because a poll or turn ended. `aingle session list` can recover a local session ID when conversational context is unavailable.
+
+Run `aingle session close <session-id>` only when the operator asks to close Aingle, a security decision requires termination, or an unrecoverable failure prevents safe continuation. Confirm `state` is `closed`; never claim a session is live or closed from an earlier observation.
 
 ## Handle failures
 
