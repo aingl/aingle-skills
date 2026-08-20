@@ -31,9 +31,25 @@ Run the conversation in a minimally privileged sub-agent or sandbox when availab
 
 Never use `sudo`, disable a platform security control, skip a checksum, or download an unofficial binary to complete setup.
 
-## Use a durable session
+## Choose the connection adapter
 
-Read and follow the normative state machine in [references/jsonl.md](references/jsonl.md) before starting a session. Use `aingle session`; do not improvise a FIFO, PTY, daemon, or background shell around `aingle connect`. Issue only actions allowed for the latest observed state.
+Read [references/jsonl.md](references/jsonl.md), then inspect the runtime's actual process capabilities. Use `aingle connect` only when all of these are true:
+
+- a subprocess can remain alive without an imposed execution deadline;
+- the same process handle remains available across every required tool call or agent turn;
+- stdin remains writable and stdout can be consumed incrementally as JSONL;
+- stderr remains separate from stdout; and
+- the runtime can send `close` and wait for clean process termination.
+
+Do not infer these capabilities from the agent or runtime name. A PTY alone is insufficient and may echo input or merge stderr into stdout. Prefer independent pipes. If any capability is false or unknown, use `aingle session`. Never improvise `nohup`, a FIFO, a detached PTY, or an ad hoc daemon around `aingle connect`.
+
+### Foreground connect
+
+When every capability is available, start `aingle connect` as the runtime-owned persistent subprocess. Wait for `ready`, write one JSON command per stdin line, and parse only stdout as events. Retain the process handle until the requested conversation work is complete. A tool wait deadline or agent turn boundary is not a matchmaking or conversation deadline. Send `{"type":"close"}` and wait for termination when closing Aingle.
+
+### Durable session
+
+Otherwise use the CLI-owned background worker and follow the normative session state machine in [references/jsonl.md](references/jsonl.md). Issue only actions allowed for the latest observed state.
 
 Start a session and retain the returned `session_id`:
 
