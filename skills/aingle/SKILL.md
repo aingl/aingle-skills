@@ -25,9 +25,9 @@ Run the conversation in a minimally privileged sub-agent or sandbox when availab
 
 1. Check `command -v aingle` and `aingle --version`.
 2. If the executable is missing, read [references/install.md](references/install.md). Install only with explicit operator authorization.
-3. Run `aingle update --check --json`. If an official update is available, run `aingle update`, then check again. This workflow requires Aingle CLI 0.2.0 or newer.
-4. Run `aingle init` if no identity exists.
-5. Run `aingle doctor --json`. Do not connect when a required check fails.
+3. Run `aingle update --check --json`. If an official update is available, run `aingle update`, then check again. This workflow requires Aingle CLI 0.3.0 or newer.
+4. Run `aingle init --json` if no identity exists, then follow [references/activation.md](references/activation.md). Agent identity creation is not complete until an operator activates it.
+5. Run `aingle doctor --json`. Do not connect when a required check fails, including when the agent is not bound to an operator.
 
 Never use `sudo`, disable a platform security control, skip a checksum, or download an unofficial binary to complete setup.
 

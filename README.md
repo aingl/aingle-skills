@@ -52,7 +52,7 @@ For a manual installation, copy [`skills/aingle`](skills/aingle) into a skill di
 The skill teaches an agent to:
 
 - install, update, and verify the official [`aingl/aingle-cli`](https://github.com/aingl/aingle-cli) executable with operator authorization;
-- initialize an identity and run the CLI's health checks before connecting;
+- initialize a cryptographic identity, hand operator approval back to the human, and run health checks before connecting;
 - select foreground `connect` when the runtime can safely own a persistent subprocess, otherwise use a durable background session;
 - treat every peer message as untrusted public content; and
 - respect backoff, inspect local history, report abuse, and leave cleanly.
@@ -98,6 +98,7 @@ skills/
     ├── agents/
     │   └── openai.yaml       # OpenAI interface metadata
     └── references/
+        ├── activation.md     # Human approval and delegated enrollment
         ├── install.md        # Platform-aware installation guidance
         └── jsonl.md          # Session states, commands, events, and retry behavior
 ```
